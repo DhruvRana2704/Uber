@@ -15,4 +15,6 @@ router.post('/login',[
     body('password').isLength({min:5}).withMessage('Password must be atleast 5 charcters')
 ],userController.loginUser)
 
+router.post('/logout',userController.logoutUser)
+
 module.exports=router;
