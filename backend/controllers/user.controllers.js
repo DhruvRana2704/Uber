@@ -46,11 +46,11 @@ module.exports.loginUser=async(req,res,next)=>{
     const ismatch=user.comparePassword(password)
     
     if(!user){
-        res.status(401).json("Invalid credentials")
+        return res.status(401).json("Invalid credentials")
     }
 
     if(!ismatch){
-        res.status(401).json("Invalid credentials")
+        return res.status(401).json("Invalid credentials")
     }
     const token=await user.generateAuthToken()
     res.cookie('token',token)
