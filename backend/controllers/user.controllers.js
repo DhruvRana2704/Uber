@@ -43,7 +43,7 @@ module.exports.loginUser=async(req,res,next)=>{
     const {email,password}=req.body;
 
     const user= await userModel.findOne({email}).select('+password')
-    const ismatch=user.comparePassword(password)
+    const ismatch=await user.comparePassword(password)
     
     if(!user){
         return res.status(401).json("Invalid credentials")
