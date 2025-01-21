@@ -5,19 +5,23 @@ const blacklistTokenModel = require('../models/blacklistToken.model')
 module.exports.registerCaptain = async function (req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        res.status(400).json({ errors: errors.array })
+        
+        return res.status(400).json({ errors: errors.array() })
     }
-
+    
     const { fullname, email, password, vehicle } = req.body;
 
+    
     const hashedPassword = await captainModel.hashPassword(password)
+    
+    const isCaptain = await captainModel.findOne({ email });
 
-    const isCaptain = await captainModel.findOne({ email })
     if (isCaptain) {
-        return res.status(400).json({errors:[{msg:'Captain already exists'}]})
+        console.log("Captain already exists")
+        return res.status(400).json({ errors: [{ msg: 'Captain already exists' }] });
     }
 
-    const captain =await captainService.createCaptain({ 
+     const captain =await captainService.createCaptain({ 
         firstname: fullname.firstname,
         lastname: fullname.lastname,
         email,
@@ -27,8 +31,10 @@ module.exports.registerCaptain = async function (req, res, next) {
         vehicleType: vehicle.vehicleType,
         capacity: vehicle.capacity
     })
+
     const token =captain.generateAuthToken();
     res.status(201).json({ token, captain })
+
 }
 
 module.exports.loginCaptain=async(req,res,next)=>{

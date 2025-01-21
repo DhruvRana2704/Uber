@@ -38,7 +38,6 @@ const captainSchema=new mongoose.Schema({
         plate:{
             type:String,
             required:true,
-            unique:true,
             minlength:[3,'Number Plate must be atleast 3 characters long']
         },
        
@@ -50,7 +49,7 @@ const captainSchema=new mongoose.Schema({
         vehicleType:{
             type:String,
             required:true,
-            enum:['Motorcycle','Car','Auto']
+            enum:['moto','car','auto']
         }
     },
     location:{
