@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CaptainDataContext } from '../context/CaptainContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
+import axios from 'axios';
 
 const CaptainSignUp = () => {
   const { captain, setCaptain } = useContext(CaptainDataContext)
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
   const [email, setEmail] = useState('')
@@ -16,28 +16,28 @@ const CaptainSignUp = () => {
   const [plate, setPlate] = useState('')
   const [capacity, setCapacity] = useState('')
   const [vehicle, setVehicle] = useState('')
-  
-  const submitHandler =async (e) => {
+
+  const submitHandler = async (e) => {
     e.preventDefault()
 
-    const captainData={
-      fullname:{
-        firstname:firstname,
-        lastname:lastname
+    const captainData = {
+      fullname: {
+        firstname: firstname,
+        lastname: lastname
       },
-      email:email,
-      password:password,
-      vehicle:{
-        color,plate,capacity,vehicleType:vehicle
+      email: email,
+      password: password,
+      vehicle: {
+        color, plate, capacity, vehicleType: vehicle
       }
     }
-    console.log(captainData)
-    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`,captainData); 
-    
-    if(response==201){
-      const data=response.data;
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData);
+
+
+    if (response.status == 201) {
+      const data = response.data;
       setCaptain(data.captain);
-      localStorage.setItem('token',data.token)
+      localStorage.setItem('token', data.token)
       navigate('/captain-home')
     }
 
@@ -88,37 +88,37 @@ const CaptainSignUp = () => {
 
             <h3 className='text-xl font-medium mb-2'>Enter vehicle's details:</h3>
             <div className='mb-7'>
-            <div className='flex gap-4'>
-              <input type="text" required
-                value={color}
-                onChange={(e) => {
-                  setColor(e.target.value)
-                }}
-                placeholder="Color" className='w-1/2 bg-[#eeeeee] mb-6 rounded px-4 py-2 border-2 text-base placeholder:text-base' />
+              <div className='flex gap-4'>
+                <input type="text" required
+                  value={color}
+                  onChange={(e) => {
+                    setColor(e.target.value)
+                  }}
+                  placeholder="Color" className='w-1/2 bg-[#eeeeee] mb-6 rounded px-4 py-2 border-2 text-base placeholder:text-base' />
 
-              <input type="text" required
-                value={capacity}
-                onChange={(e) => {
-                  setCapacity(e.target.value)
-                }}
-                placeholder="Capacity" className='w-1/2 bg-[#eeeeee] mb-6 rounded px-4 py-2  border-2 text-base placeholder:text-base' />
-            </div>
-            <div className='flex gap-4'>
-              <input type="text" required
-                value={plate}
-                onChange={(e) => {
-                  setPlate(e.target.value)
-                }}
-                placeholder="Plate" className='bg-[#eeeeee] mb-6 rounded px-4 py-2 w-1/2 border-2 text-base placeholder:text-base' />
+                <input type="text" required
+                  value={capacity}
+                  onChange={(e) => {
+                    setCapacity(e.target.value)
+                  }}
+                  placeholder="Capacity" className='w-1/2 bg-[#eeeeee] mb-6 rounded px-4 py-2  border-2 text-base placeholder:text-base' />
+              </div>
+              <div className='flex gap-4'>
+                <input type="text" required
+                  value={plate}
+                  onChange={(e) => {
+                    setPlate(e.target.value)
+                  }}
+                  placeholder="Plate" className='bg-[#eeeeee] mb-6 rounded px-4 py-2 w-1/2 border-2 text-base placeholder:text-base' />
 
 
-              <select required value={vehicle} onChange={(e)=>{setVehicle(e.target.value)}} className='bg-[#eeeeee] mb-6 rounded px-4 py-2 w-1/2 border-2 text-base placeholder:text-base'>
-                <option value="" selected disabled>Vehicle Type</option>
-                <option value="car" >Car</option>
-                <option value="auto" >Auto</option>
-                <option value="moto" >Moto</option>
-              </select>
-            </div>
+                <select required value={vehicle} onChange={(e) => setVehicle(e.target.value)} className='bg-[#eeeeee] mb-6 rounded px-4 py-2 w-1/2 border-2 text-base placeholder:text-base'>
+                  <option value="" disabled>Vehicle Type</option>
+                  <option value="car">Car</option>
+                  <option value="auto">Auto</option>
+                  <option value="moto">Moto</option>
+                </select>
+              </div>
             </div>
             <button className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 w-full  text-lg placeholder:text-base'>Create Account as Captain</button>
           </div>
