@@ -1,11 +1,11 @@
-import React, { useState,useContext } from 'react'
+import React, { useState,useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { CaptainDataContext } from '../context/CaptainContext'
 import axios from 'axios'
 const CaptainLogin = () => {
   const navigate = useNavigate()
-  const {captain,setCaptain}=useContext(CaptainDataContext)
+  const { captain, setCaptain } = React.useContext(CaptainDataContext);
   const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -19,6 +19,7 @@ const CaptainLogin = () => {
         localStorage.setItem('token', data.token)
         navigate('/captain-home')
       }
+     
       setEmail('')
       setPassword('')
     }

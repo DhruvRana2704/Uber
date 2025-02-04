@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import 'remixicon/fonts/remixicon.css';
@@ -7,9 +7,11 @@ import VehiclePanel from '../components/VehiclePanel';
 import ConfirmedRide from '../components/ConfirmedRide';
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
+import { SocketContext } from '../context/SocketContext';
+import { UserDataContext } from '../context/UserContext';
 import axios from 'axios'
-
 const Home = () => {
+  const {socket}=useContext(SocketContext)
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -28,6 +30,11 @@ const Home = () => {
   const [activeField,setActiveField]=useState(null)
   const [fare,setFare]=useState({})
   const [vehicleType,setVehicleType]=useState(null)
+const {user}=useContext(UserDataContext)
+
+  useEffect(()=>{
+    socket.emit('join',{userId:user._id,userType:'user'})
+  },[user])
 
   const handlePickupChange=async(e)=>{
     setPickup(e.target.value)
@@ -81,7 +88,7 @@ const Home = () => {
 
   useGSAP(function () {
     if (ConfirmRidePanel) {
-      gsap.to(ConfirmRidePanelRef.current, { transform: "translateY(0" })
+      gsap.to(ConfirmRidePanelRef.current, { transform: "translateY(0)" })
 
     }
     else {
@@ -109,6 +116,14 @@ const Home = () => {
       gsap.to(waitingForDriverRef.current, { transform: "translateY(100%)" })
     }
   }, [waitingForDriver])
+
+
+  socket.on('ride-confirmed',ride=>{
+    setVehicleFound(false)
+    setWaitingForDriver(true)
+
+  })
+
 
 async function findTrip(){
   setVehiclePanel(true)

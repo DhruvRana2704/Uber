@@ -26,7 +26,7 @@ const UserLogin = () => {
     }
     
     setEmail('')
-      setPassword('')
+    setPassword('')
   }
 
   return (
