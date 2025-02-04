@@ -1,6 +1,7 @@
 const rideModel=require('../models/ride.model')
 const mapService=require('../services/maps.service')
-const crypto=require('crypto')
+const crypto=require('crypto');
+const { sendMessageToSocketId } = require('../socket');
 
 async function getFare(pickup,destination){
    
@@ -68,7 +69,7 @@ console.log('captain',captain._id)
     })
 
    try {
-     const ride=await rideModel.findOne({_id:rideId}).populate('user');
+     const ride=await rideModel.findOne({_id:rideId}).populate('user').populate('captain').select('+otp');
    
     if(!ride){
         throw new Error('Ride not found!')
@@ -78,4 +79,63 @@ console.log('captain',captain._id)
 } catch (error) {
     console.log(error)  
    }
+}
+
+    module.exports.startRide = async ({ rideId, otp, captain }) => {
+        console.log('OTP:',otp)
+        if (!rideId || !otp) {
+            throw new Error('Ride id and OTP are required');
+        }
+    
+        const ride = await rideModel.findOne({
+            _id: rideId
+        }).populate('user').populate('captain').select('+otp');
+    
+        if (!ride) {
+            throw new Error('Ride not found');
+        }
+    
+        if (ride.status !== 'accepted') {
+            throw new Error('Ride not accepted');
+        }
+    
+        if (ride.otp !== otp) {
+            throw new Error('Invalid OTP');
+        }
+    
+        await rideModel.findOneAndUpdate({
+            _id: rideId
+        }, {
+            status: 'ongoing'
+        })
+       
+        return ride;
+    }
+
+   
+module.exports.endRide = async ({ rideId, captain }) => {
+    if (!rideId) {
+        throw new Error('Ride id is required');
+    }
+
+    const ride = await rideModel.findOne({
+        _id: rideId,
+        captain: captain._id
+    }).populate('user').populate('captain').select('+otp');
+
+    if (!ride) {
+        throw new Error('Ride not found');
+    }
+
+    if (ride.status !== 'ongoing') {
+        throw new Error('Ride not ongoing');
+    }
+
+    await rideModel.findOneAndUpdate({
+        _id: rideId
+    }, {
+        status: 'completed'
+    })
+
+    return ride;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
+import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import 'remixicon/fonts/remixicon.css';
 import LocationSearchPanel from '../components/LocationSearchPanel';
@@ -9,6 +10,7 @@ import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import { SocketContext } from '../context/SocketContext';
 import { UserDataContext } from '../context/UserContext';
+import Riding from './Riding';
 import axios from 'axios'
 const Home = () => {
   const {socket}=useContext(SocketContext)
@@ -31,6 +33,8 @@ const Home = () => {
   const [fare,setFare]=useState({})
   const [vehicleType,setVehicleType]=useState(null)
 const {user}=useContext(UserDataContext)
+const [ride,setRide]=useState(null)
+const navigate=useNavigate()
 
   useEffect(()=>{
     socket.emit('join',{userId:user._id,userType:'user'})
@@ -121,7 +125,12 @@ const {user}=useContext(UserDataContext)
   socket.on('ride-confirmed',ride=>{
     setVehicleFound(false)
     setWaitingForDriver(true)
+    setRide(ride)
+  })
 
+  socket.on('ride-started',ride=>{
+    setWaitingForDriver(false)
+    navigate('/riding',{state:{ride}})
   })
 
 
@@ -197,7 +206,7 @@ async function findTrip(){
           </div>
 
           <div ref={waitingForDriverRef} className='fixed z-10 bottom-0 translate-y-full  w-full  px-3  py-6 pt-12 bg-white'>
-            <WaitingForDriver setWaitingForDriver={setWaitingForDriver}></WaitingForDriver>
+            <WaitingForDriver ride={ride} setWaitingForDriver={setWaitingForDriver}></WaitingForDriver>
           </div>
 
         </div>

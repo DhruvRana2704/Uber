@@ -41,7 +41,7 @@ const CaptainHome = () => {
   }, [captain])
 
   socket.on('new-ride', (data) => {
-    console.log(data)
+    console.log('data',data)
     setRide(data)
     setRidePopUpPanel(true)
   })
@@ -91,7 +91,16 @@ async function confirmRide(){
         <RidePopUp ride={ride} confirmRide={confirmRide} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel} setRidePopUpPanel={setRidePopUpPanel}></RidePopUp>
       </div>
       <div ref={confirmRidePopUpPanelRef} className='fixed w-full h-screen  z-10 translate-y-full bottom-0 bg-white px-3 py-10 pt-12'>
-        <ConfirmRidePopUp setConfirmRidePopUpPanel={setConfirmRidePopUpPanel} setRidePopUpPanel={setRidePopUpPanel}></ConfirmRidePopUp>
+      {ride ? (
+  <ConfirmRidePopUp 
+    ride={ride} 
+    setConfirmRidePopUpPanel={setConfirmRidePopUpPanel} 
+    setRidePopUpPanel={setRidePopUpPanel} 
+  />
+) : (
+  <p>Loading ride details...</p>
+)}
+
       </div>
     </div>
   )
