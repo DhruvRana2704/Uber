@@ -9,6 +9,7 @@ import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { SocketContext } from '../context/SocketContext'
 import { useEffect } from 'react'
 import { CaptainDataContext } from '../context/CaptainContext'
+import LiveTracking from '../components/LiveTracking'
 import axios from 'axios';
 
 const CaptainHome = () => {
@@ -84,7 +85,7 @@ async function confirmRide(){
         <Link to='/captain-login' className='fixed right-2  bg-white top-2 h-10 w-10 flex items-center justify-center rounded-full'><i className="font-medium text-lg ri-logout-box-r-line"></i></Link>
       </div>
       <div className='h-[60%]'>
-        <img className='h-full w-full' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="Background" />
+        <LiveTracking></LiveTracking>
       </div>
       <CaptainDetails></CaptainDetails>
       <div ref={ridePopUpPanelRef} className='fixed w-full z-10 translate-y-full bottom-0 bg-white px-3 py-10 pt-12'>

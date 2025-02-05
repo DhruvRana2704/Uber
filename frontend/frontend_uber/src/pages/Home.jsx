@@ -12,6 +12,7 @@ import { SocketContext } from '../context/SocketContext';
 import { UserDataContext } from '../context/UserContext';
 import Riding from './Riding';
 import axios from 'axios'
+import LiveTracking from '../components/LiveTracking';
 const Home = () => {
   const {socket}=useContext(SocketContext)
   const panelRef = useRef(null);
@@ -74,7 +75,7 @@ const navigate=useNavigate()
       gsap.to(panelRef.current, { height: '77%' })
       gsap.to(panelCloseRef.current, { opacity: 1 })
     } else {
-      gsap.to(panelRef.current, { height: 0, padding: 0 })
+      gsap.to(panelRef.current, { height: 0, padding: 0,zIndex:0 })
       gsap.to(panelCloseRef.current, { opacity: 0 })
     }
   }, [panelOpen])
@@ -96,14 +97,14 @@ const navigate=useNavigate()
 
     }
     else {
-      gsap.to(ConfirmRidePanelRef.current, { transform: "translateY(100%)" })
+      gsap.to(ConfirmRidePanelRef.current, { transform: "translateY(120%)" })
 
     }
   }, [ConfirmRidePanel])
 
   useGSAP(function () {
     if (vehicleFound) {
-      gsap.to(vehicleFoundRef.current, { transform: "translateY(0" })
+      gsap.to(vehicleFoundRef.current, { transform: "translateY(0)" })
 
     }
     else {
@@ -160,12 +161,12 @@ async function findTrip(){
     <div className='h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="Uber Logo" />
 
-      <div className='h-screen w-screen'>
-        <img className='h-full w-full' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="Background" />
+      <div className='h-screen w-screen z-10'>
+        <LiveTracking></LiveTracking>
       </div>
 
-      <div className='flex flex-col justify-end absolute h-screen top-0 w-full'>
-        <div className='bg-white h-[27%] p-5 relative'>
+      <div className='flex flex-col justify-end absolute z-0 h-full top-0 w-full'>
+        <div className='bg-white h-[28%] p-5 relative'>
           <h5 ref={panelCloseRef} onClick={() => setPanelOpen(false)} className='absolute opacity-0 top-4 right-6 text-2xl'><i className="ri-arrow-down-s-line"></i></h5>
           <h4 className='text-2xl font-semibold'>Find a trip</h4>
           <form onSubmit={(e)=>submitHandler(e)}>

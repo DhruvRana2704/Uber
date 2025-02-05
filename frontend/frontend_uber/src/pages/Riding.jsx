@@ -2,6 +2,7 @@ import React ,{useEffect,useContext}from 'react'
 import { Link, useLocation} from 'react-router-dom'
 import { SocketContext } from '../context/SocketContext'
 import { useNavigate } from 'react-router-dom'  
+import LiveTracking from '../components/LiveTracking'
 const Riding = () => {
   const navigate=useNavigate()
   const location=useLocation()
@@ -15,7 +16,7 @@ socket.on('ride-ended',()=>{
       <div className='h-screen'>
         <Link to='/home' className='fixed right-2  bg-white top-2 h-10 w-10 flex items-center justify-center rounded-full'><i className="font-medium text-lg ri-home-5-line"></i></Link>
       <div className='h-[60%]'>
-        <img className='h-full w-full' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="Background" />
+        <LiveTracking></LiveTracking>
       </div>
         <div className='h-[40%] p-4 '>
         <div className='flex items-center justify-between'>
