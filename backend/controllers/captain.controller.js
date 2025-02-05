@@ -20,7 +20,7 @@ module.exports.registerCaptain = async function (req, res, next) {
         console.log("Captain already exists")
         return res.status(400).json({ errors: [{ msg: 'Captain already exists' }] });
     }
-
+    console.log(fullname)
      const captain =await captainService.createCaptain({ 
         firstname: fullname.firstname,
         lastname: fullname.lastname,
